@@ -2,7 +2,7 @@
 
 This is a project for NRG 741: Big Data Analytics in Healthcare.
 
-This is a work in progress! Come back later to view the final product. 
+Please note that this is a work in progress! Come back later to view the final product. 
 
 ## Links to Original Data:
 
@@ -13,7 +13,7 @@ As the data files are too large to store on GitHub, the raw data links are provi
 
 ## Project Objectives
 
-This is an exploratory and association data project. The goal of this study is to explore the association between the prevalence of chronic disease with a city's EPA assigned walkability score.
+This is an exploratory and association data analysis project. The goal of this study is to explore the association between the prevalence of chronic disease with a city's EPA assigned walkability score.
 
 Some secondary questions of interest are:
  
