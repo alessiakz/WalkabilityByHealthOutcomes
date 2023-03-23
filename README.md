@@ -17,7 +17,7 @@ This is an exploratory and association data analysis project. The goal of this s
 
 Some secondary questions of interest are:
  
-* Which chronic disease have a higher/lower association with walkability score?
+* Which chronic diseases have a higher/lower association with walkability score?
 * Which cities have the lowest rates of chronic disease? Which cities have the highest rates of chronic disease?
 * Are there any trends in association between chronic disease and walkability score between states and regions?
 
