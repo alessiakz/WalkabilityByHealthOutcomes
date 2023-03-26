@@ -1,0 +1,107 @@
+---
+title: 'NRG 741: Milestone 2'
+author: "Alessia Kettlitz"
+date: "2023-03-27"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, load-in-data, include = FALSE}
+
+here::i_am("Report.Rmd") #identifies root directory location
+data <- readRDS( #reading in R object for data
+  file = here::here("output/data_clean.rds")
+)
+
+```
+
+# Introduction
+
+## Background
+
+This project aims to compare key health outcomes in major U.S. cities with their Environmental Protection Agency (EPA) walkability score.
+
+There is a strong emphasis by medical institutions, the Centers for Disease Control and Prevention (CDC), public health officials and urban planners on the importance of creating a walkable city to improve health outcomes of residences. Building walkable cities can encourage people to lead an active lifestyle. Further, in 2015, the Surgeon General made a call to action to encourage walking and building walkable spaces in cities. 
+
+## Project Objectives
+
+The primary analysis question is: Is a city's walkability score associated with prevalence of chronic disease?
+
+An association above 0.5 with a p-value less than 0.05 will indicate that an association exist.
+
+The secondary questions of this analysis are:
+
+* Which chronic diseases have a higher/lower association with walkability score?
+* Which cities have the lowest rates of chronic disease? Which cities have the highest rates of chronic disease?
+
+# Methods
+
+## Data
+
+Two data sets were used for the analysis of this project. Both data sets were collected and provided by U.S. government institutions. These data sets were merged for final analyses. 
+
+### 500 Cities: Local Data for Better Health, 2019
+
+This data set was obtained from the Division of Population Health, Epidemiology and Surveillance Branch of the CDC. It contains estimates for the 500 largest U.S. cities on several health-related metrics, such as health outcomes, health-related behaviors, and prevention methods. For this project, only health outcomes were used. These estimates were obtained from 2016 and 2017. 
+
+The data set is available for download here: https://chronicdata.cdc.gov/500-Cities-Places/500-Cities-Local-Data-for-Better-Health-2019-relea/6vp6-wxuq
+
+### Walkabilty Index
+
+The Walkability Index is a publicly available data set collected by the EPA. The data set is divided by Census 2019 block groups, each block group has a walkability index calculated based on several attributes, including intersection density, proximity of transit stops, and the diversity of land use such as closeness of commercial buildings and housing. These attributes are known to influence the probability of whether use walking as a mode of transportation. 
+
+This data set is available for access here: https://catalog.data.gov/dataset/walkability-index
+
+## Data Wrangling
+
+Considerable data wrangling was necessary for this project due to the use of two data sets, and the need to merge these data sets together. Both data sets were filtered and altered to match structures. All data wrangling used tidyverse functions.
+
+The CDC data set was first limited to city-level estimates, health outcome measures, and age-adjusted prevalances only. The city-level estimates were used as the walkability index data set is also at the city-level. Further, age-adjusted prevalances were used over crude prevalances as many chronic health outcomes are associated with age. Next, CBSA codes were assigned to each city that was available in both the CDC and EPA data sets for matching later on.
+
+For the EPA data set, the walkability index of each core-based statistical area (CBSA) was calculated through the average of each block group in that CBSA. 
+
+Once both data sets were restructured, they were merged on the CBSA code. Then, the structure of the data set was changed from the long to wide format. This resulted in a clean data set with a row for each CBSA and columns for walkability score, and prevalences of health outcomes. 
+
+## Limitations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r, table1}
+#| fig.align = 'center',
+
+table_1 <- readRDS(
+  file = here::here("output/table_1.rds")
+)
+
+table_1
+
+```
+
+```{r, table2}
+#| fig.align = 'center',
+
+table_2 <- readRDS(
+  file = here::here("output/table_2.rds")
+)
+
+table_2
+
+```
