@@ -31,7 +31,7 @@ attr(data_clean$Diabetes,'label') <-
 attr(data_clean$HBP,'label') <- 
   'Prevalence of High Blood Pressure (%)'
 attr(data_clean$Cholesterol,'label') <- 
-  'Prevalence of High Cholesterol Among Those Who Have Been Screened in the Past 5 Years (%)'
+  'Prevalence of High Cholesterol (%)'
 attr(data_clean$MentHealth,'label') <- 
   'Prevalence of Poor Mental health For >= 14 Days (%)'
 attr(data_clean$PhysHealth,'label') <- 
@@ -44,31 +44,158 @@ tab1 <- data_clean %>%
   select(meanNatWalkInd, Arthritis, Cancer, KidneyDisease, CHD, Asthma,
          Diabetes, HBP, Cholesterol, MentHealth, PhysHealth, Stroke) %>% 
   tbl_summary() %>% 
-  modify_header(label = "**Variable**")
+  modify_header(label = "**Variable**") %>% 
+  as_gt()
 
 tab1
 
+#limiting to top 20 cities
+data_20 <- data_clean %>% 
+  filter(rank(desc(CBSA_POP))<=20)
+
+# tab 2 includes: meanNatWalkInd, Arthritis, Asthma, Cancer
 tab2 <- data_20 %>%
-  select(CBSA_Name, meanNatWalkInd, Arthritis, Cancer, KidneyDisease, CHD, Asthma,
-         Diabetes, HBP, Cholesterol, MentHealth, PhysHealth, Stroke) %>% 
+  select(CBSA_Name, meanNatWalkInd, Arthritis, Asthma, Cancer) %>% 
   arrange(CBSA_Name) %>% 
   gt(rowname_col = "CBSA_Name") %>% 
   tab_header(
-    title = md("**Walkability Index and Prevalence of Health Outcomes (%) Among Top 20 Cities by Population**")) %>% 
+    title = md("**Walkability Index and Prevalence of Arthritis, Asthma, and Cancer (%) Among Top 20 Cities by Population**")) %>% 
   tab_stubhead(label = "Core-Based Statistical Area (CBSA)"
   ) %>% 
   fmt_number(
-    columns = c(meanNatWalkInd, Arthritis, Cancer, KidneyDisease, CHD, Asthma, Diabetes, HBP, Cholesterol, MentHealth, PhysHealth, Stroke),
+    columns = c(meanNatWalkInd, Arthritis, Asthma, Cancer),
+    rows = everything(),
+    decimals = 2,
+    n_sigfig = NULL,
+  ) %>% 
+  cols_label(
+    meanNatWalkInd = "Walkability Index") %>% 
+  cols_align(
+    align = "center",
+    columns = everything()
+  ) %>% 
+  cols_align_decimal() #%>% 
+#cols_width(
+#  CBSA_Name ~ px(150),
+#  everything() ~ px(85)
+#)
+
+tab2
+
+# tab 3 includes: meanNatwalkInd, KidneyDisease, Diabetes
+
+tab3 <- data_20 %>%
+  select(CBSA_Name, meanNatWalkInd, KidneyDisease, Diabetes) %>% 
+  arrange(CBSA_Name) %>% 
+  gt(rowname_col = "CBSA_Name") %>% 
+  tab_header(
+    title = md("**Walkability Index and Prevalence of Kidney Disease and Diabetes (%) Among Top 20 Cities by Population**")) %>% 
+  tab_stubhead(label = "Core-Based Statistical Area (CBSA)"
+  ) %>% 
+  fmt_number(
+    columns = c(meanNatWalkInd, KidneyDisease, Diabetes),
     rows = everything(),
     decimals = 2,
     n_sigfig = NULL,
   ) %>% 
   cols_label(
     meanNatWalkInd = "Walkability Index",
-    KidneyDisease = "Kidney Disease",
-    CHD = "Coronary Heart Disease",
+    KidneyDisease = "Kidney Disease"
+  ) %>% 
+  cols_align(
+    align = "center",
+    columns = everything()
+  ) %>% 
+  cols_align_decimal() #%>% 
+#cols_width(
+#  CBSA_Name ~ px(150),
+#  everything() ~ px(85)
+#)
+
+tab3
+
+# tab 4 includes: meanNatWalkInd, CHD, Stroke
+tab4 <- data_20 %>%
+  select(CBSA_Name, meanNatWalkInd, CHD, Stroke) %>% 
+  arrange(CBSA_Name) %>% 
+  gt(rowname_col = "CBSA_Name") %>% 
+  tab_header(
+    title = md("**Walkability Index and Prevalence of Coronary Heart Disease and Stroke (%) Among Top 20 Cities by Population**")) %>% 
+  tab_stubhead(label = "Core-Based Statistical Area (CBSA)"
+  ) %>% 
+  fmt_number(
+    columns = c(meanNatWalkInd, CHD, Stroke),
+    rows = everything(),
+    decimals = 2,
+    n_sigfig = NULL,
+  ) %>% 
+  cols_label(
+    meanNatWalkInd = "Walkability Index",
+    CHD = "Coronary Heart Disease"
+  ) %>% 
+  cols_align(
+    align = "center",
+    columns = everything()
+  ) %>% 
+  cols_align_decimal() #%>% 
+#cols_width(
+#  CBSA_Name ~ px(150),
+#  everything() ~ px(85)
+#)
+
+tab4
+
+# tab 4 includes: meanNatWalkInd, HBP, Cholesterol
+
+tab5 <- data_20 %>%
+  select(CBSA_Name, meanNatWalkInd, HBP, Cholesterol) %>% 
+  arrange(CBSA_Name) %>% 
+  gt(rowname_col = "CBSA_Name") %>% 
+  tab_header(
+    title = md("**Walkability Index and Prevalence of High Blood Pressure and Cholesterol (%) Among Top 20 Cities by Population**")) %>% 
+  tab_stubhead(label = "Core-Based Statistical Area (CBSA)"
+  ) %>% 
+  fmt_number(
+    columns = c(meanNatWalkInd, HBP, Cholesterol),
+    rows = everything(),
+    decimals = 2,
+    n_sigfig = NULL,
+  ) %>% 
+  cols_label(
+    meanNatWalkInd = "Walkability Index",
     HBP = "High Blood Pressure",
     Cholesterol = "High Cholesterol",
+  ) %>% 
+  cols_align(
+    align = "center",
+    columns = everything()
+  ) %>% 
+  cols_align_decimal() #%>% 
+#cols_width(
+#  CBSA_Name ~ px(150),
+#  everything() ~ px(85)
+#)
+
+tab5
+
+# tab 5 includes: meanNatWalkInd, MentHealth, Phys Health
+
+tab6 <- data_20 %>%
+  select(CBSA_Name, meanNatWalkInd, MentHealth, PhysHealth) %>% 
+  arrange(CBSA_Name) %>% 
+  gt(rowname_col = "CBSA_Name") %>% 
+  tab_header(
+    title = md("**Walkability Index, Poor Mental Health and Physical Health Among Top 20 Cities by Population**")) %>% 
+  tab_stubhead(label = "Core-Based Statistical Area (CBSA)"
+  ) %>% 
+  fmt_number(
+    columns = c(meanNatWalkInd, MentHealth, PhysHealth),
+    rows = everything(),
+    decimals = 2,
+    n_sigfig = NULL,
+  ) %>% 
+  cols_label(
+    meanNatWalkInd = "Walkability Index",
     MentHealth = "Poor Mental Health",
     PhysHealth = "Poor Physical Health"
   ) %>% 
@@ -76,13 +203,13 @@ tab2 <- data_20 %>%
     align = "center",
     columns = everything()
   ) %>% 
-  cols_align_decimal() %>% 
-  cols_width(
-    CBSA_Name ~ px(150),
-    everything() ~ px(85)
-  )
+  cols_align_decimal() #%>% 
+#cols_width(
+#  CBSA_Name ~ px(150),
+#  everything() ~ px(85)
+#)
 
-tab2
+tab6
 
 saveRDS(
   tab1,
@@ -94,4 +221,26 @@ saveRDS(
   tab2,
   file = here::here("output/table_2.rds")
 )
+
+saveRDS(
+  tab3,
+  file = here::here("output/table_3.rds")
+)
+
+saveRDS(
+  tab4,
+  file = here::here("output/table_4.rds")
+)
+
+saveRDS(
+  tab5,
+  file = here::here("output/table_5.rds")
+)
+
+saveRDS(
+  tab6,
+  file = here::here("output/table_6.rds")
+)
+
+
 

@@ -3,12 +3,17 @@ title: 'NRG 741: Milestone 2'
 author: "Alessia Kettlitz"
 date: "2023-03-27"
 output:
+  pdf_document:
+    latex_engine: xelatex
   html_document: default
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+
+library(knitr)
+library(kableExtra)
+
 ```
 
 ```{r, load-in-data, include = FALSE}
@@ -22,11 +27,13 @@ data <- readRDS( #reading in R object for data
 
 # Introduction
 
+This project is hosted on GitHub here: https://github.com/alessiakz/WalkabilityByHealthOutcomes
+
 ## Background
 
 This project aims to compare key health outcomes in major U.S. cities with their Environmental Protection Agency (EPA) walkability score.
 
-There is a strong emphasis by medical institutions, the Centers for Disease Control and Prevention (CDC), public health officials and urban planners on the importance of creating a walkable city to improve health outcomes of residences. Building walkable cities can encourage people to lead an active lifestyle. Further, in 2015, the Surgeon General made a call to action to encourage walking and building walkable spaces in cities. 
+There is a strong emphasis by medical institutions, the Centers for Disease Control and Prevention (CDC), public health officials and urban planners on the importance of creating a walkable city to improve health outcomes of residences. Building walkable cities can encourage people to lead an active lifestyle. Further, in 2015, the Surgeon General made a call to action to encourage walking and building walkable spaces in cities.
 
 ## Project Objectives
 
@@ -36,54 +43,54 @@ An association above 0.5 with a p-value less than 0.05 will indicate that an ass
 
 The secondary questions of this analysis are:
 
-* Which chronic diseases have a higher/lower association with walkability score?
-* Which cities have the lowest rates of chronic disease? Which cities have the highest rates of chronic disease?
+-   Which chronic diseases have a higher/lower association with walkability score?
+-   Which cities have the lowest rates of chronic disease? Which cities have the highest rates of chronic disease?
 
 # Methods
 
 ## Data
 
-Two data sets were used for the analysis of this project. Both data sets were collected and provided by U.S. government institutions. These data sets were merged for final analyses. 
+Two data sets were used for the analysis of this project. Both data sets were collected and provided by U.S. government institutions. These data sets were merged for final analyses.
 
 ### 500 Cities: Local Data for Better Health, 2019
 
-This data set was obtained from the Division of Population Health, Epidemiology and Surveillance Branch of the CDC. It contains estimates for the 500 largest U.S. cities on several health-related metrics, such as health outcomes, health-related behaviors, and prevention methods. For this project, only health outcomes were used. These estimates were obtained from 2016 and 2017. 
+This data set was obtained from the Division of Population Health, Epidemiology and Surveillance Branch of the CDC. It contains estimates for the 500 largest U.S. cities on several health-related metrics, such as health outcomes, health-related behaviors, and prevention methods. For this project, only health outcomes were used. These estimates were obtained from 2016 and 2017.
 
-The data set is available for download here: https://chronicdata.cdc.gov/500-Cities-Places/500-Cities-Local-Data-for-Better-Health-2019-relea/6vp6-wxuq
+The data set is available for download here:
 
 ### Walkabilty Index
 
-The Walkability Index is a publicly available data set collected by the EPA. The data set is divided by Census 2019 block groups, each block group has a walkability index calculated based on several attributes, including intersection density, proximity of transit stops, and the diversity of land use such as closeness of commercial buildings and housing. These attributes are known to influence the probability of whether use walking as a mode of transportation. 
+The Walkability Index is a publicly available data set collected by the EPA. The data set is divided by Census 2019 block groups, each block group has a walkability index calculated based on several attributes, including intersection density, proximity of transit stops, and the diversity of land use such as closeness of commercial buildings and housing. These attributes are known to influence the probability of whether use walking as a mode of transportation.
 
-This data set is available for access here: https://catalog.data.gov/dataset/walkability-index
+This data set is available for access here:
 
 ## Data Wrangling
 
 Considerable data wrangling was necessary for this project due to the use of two data sets, and the need to merge these data sets together. Both data sets were filtered and altered to match structures. All data wrangling used tidyverse functions.
 
-The CDC data set was first limited to city-level estimates, health outcome measures, and age-adjusted prevalances only. The city-level estimates were used as the walkability index data set is also at the city-level. Further, age-adjusted prevalances were used over crude prevalances as many chronic health outcomes are associated with age. Next, CBSA codes were assigned to each city that was available in both the CDC and EPA data sets for matching later on.
+The CDC data set was first limited to city-level estimates, health outcome measures, and age-adjusted prevalence only. The city-level estimates were used as the walkability index data set is also at the city-level. Further, age-adjusted prevalence was used over crude prevalence as many chronic health outcomes are associated with age. Next, CBSA codes were assigned to each city that was available in both the CDC and EPA data sets for matching later on.
 
-For the EPA data set, the walkability index of each core-based statistical area (CBSA) was calculated through the average of each block group in that CBSA. 
+For the EPA data set, the walkability index of each core-based statistical area (CBSA) was calculated through the average of each block group in that CBSA.
 
-Once both data sets were restructured, they were merged on the CBSA code. Then, the structure of the data set was changed from the long to wide format. This resulted in a clean data set with a row for each CBSA and columns for walkability score, and prevalences of health outcomes. 
+Once both data sets were restructured, they were merged by the CBSA code. Then, the structure of the data set was changed from the long to wide format. This resulted in a clean data set with a row for each CBSA and columns for walkability score, and prevalence of health outcomes.
 
 ## Limitations
 
+There are some limitations with this data analysis, which stem from the use of two different data sets which were obtained by different agencies with different purposes. First, the CDC and EPA data were obtained in different years, and so there is a temporal difference between the data sets. Second, the data sets measured scores at different geographic levels, where the CDC estimates were based on city-level estimates, whereas the EPA was by CBSAs and block groups. Therefore, CDC estimates had to be collapsed into their CBSA groups/ Therefore, measures are not at their most granular level. Third, the cities measured by the CDC and EPA data sets differ, and thus the sample was reduced to 151 cities which had measures in both.
 
+## Definitions of Terms
 
+* Walkability Score: This variable was calculated by the EPa based on intersections
 
+# Results
 
+## Preliminary Analyses
 
+INSERT TEXT HERE
 
+### Tables
 
-
-
-
-
-
-
-
-
+Table 1: Median and Inter-Quartile Range of Independent and Dependent Variables
 ```{r, table1}
 #| fig.align = 'center',
 
@@ -95,6 +102,7 @@ table_1
 
 ```
 
+
 ```{r, table2}
 #| fig.align = 'center',
 
@@ -105,3 +113,115 @@ table_2 <- readRDS(
 table_2
 
 ```
+
+```{r, table3}
+#| fig.align = 'center',
+
+table_3 <- readRDS(
+  file = here::here("output/table_3.rds")
+)
+
+table_3
+
+```
+
+```{r, table4}
+#| fig.align = 'center',
+
+table_4 <- readRDS(
+  file = here::here("output/table_4.rds")
+)
+
+table_4
+
+```
+
+```{r, table5}
+#| fig.align = 'center',
+
+table_5 <- readRDS(
+  file = here::here("output/table_5.rds")
+)
+
+table_5
+
+```
+
+```{r, table6}
+#| fig.align = 'center',
+
+table_6 <- readRDS(
+  file = here::here("output/table_6.rds")
+)
+
+table_6
+
+```
+
+### Scatter Plots Between Walkability Score and Health Outcomes
+
+```{r, scatter_all,  fig.show="hold", out.width="50%", echo=FALSE}
+
+fig1 <- readRDS(
+  file = here::here("output/fig1.rds")
+)
+
+fig2 <- readRDS(
+  file = here::here("output/fig2.rds")
+)
+
+fig3 <- readRDS(
+  file = here::here("output/fig3.rds")
+)
+
+fig4 <- readRDS(
+  file = here::here("output/fig4.rds")
+)
+
+fig5 <- readRDS(
+  file = here::here("output/fig5.rds")
+)
+
+fig6 <- readRDS(
+  file = here::here("output/fig6.rds")
+)
+
+fig7 <- readRDS(
+  file = here::here("output/fig7.rds")
+)
+
+fig8 <- readRDS(
+  file = here::here("output/fig8.rds")
+)
+
+fig9 <- readRDS(
+  file = here::here("output/fig9.rds")
+)
+
+fig10 <- readRDS(
+  file = here::here("output/fig10.rds")
+)
+
+fig11 <- readRDS(
+  file = here::here("output/fig11.rds")
+)
+
+fig1
+fig2
+fig3
+fig4
+fig5
+fig6
+fig7
+fig8
+fig9
+fig10
+fig11
+
+```
+
+## Plans for Final Analyses
+
+* I plan to complete a linear regression between walkability score and health outcomes
+* I plan to make a dashboard -> to better show the various cities, and also so I can learn an interactive way of displaying data
+
