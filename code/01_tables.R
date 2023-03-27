@@ -49,6 +49,13 @@ tab1 <- data_clean %>%
 
 tab1
 
+tab15 <- data_clean %>% 
+  select(State) %>% 
+  tbl_summary() %>% 
+  as_gt()
+
+tab15
+
 #limiting to top 20 cities
 data_20 <- data_clean %>% 
   filter(rank(desc(CBSA_POP))<=20)
