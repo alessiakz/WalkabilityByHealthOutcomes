@@ -56,13 +56,13 @@ Two data sets were used for the analysis of this project. Both data sets were co
 
 This data set was obtained from the Division of Population Health, Epidemiology and Surveillance Branch of the CDC. It contains estimates for the 500 largest U.S. cities on several health-related metrics, such as health outcomes, health-related behaviors, and prevention methods. For this project, only health outcomes were used. These estimates were obtained from 2016 and 2017.
 
-The data set is available for download here:
+The data set is available for download here: https://chronicdata.cdc.gov/500-Cities-Places/500-Cities-Local-Data-for-Better-Health-2019-relea/6vp6-wxuq
 
 ### Walkabilty Index
 
 The Walkability Index is a publicly available data set collected by the EPA. The data set is divided by Census 2019 block groups, each block group has a walkability index calculated based on several attributes, including intersection density, proximity of transit stops, and the diversity of land use such as closeness of commercial buildings and housing. These attributes are known to influence the probability of whether use walking as a mode of transportation.
 
-This data set is available for access here:
+This data set is available for access here: https://catalog.data.gov/dataset/walkability-index
 
 ## Data Wrangling
 
@@ -78,15 +78,35 @@ Once both data sets were restructured, they were merged by the CBSA code. Then, 
 
 There are some limitations with this data analysis, which stem from the use of two different data sets which were obtained by different agencies with different purposes. First, the CDC and EPA data were obtained in different years, and so there is a temporal difference between the data sets. Second, the data sets measured scores at different geographic levels, where the CDC estimates were based on city-level estimates, whereas the EPA was by CBSAs and block groups. Therefore, CDC estimates had to be collapsed into their CBSA groups/ Therefore, measures are not at their most granular level. Third, the cities measured by the CDC and EPA data sets differ, and thus the sample was reduced to 151 cities which had measures in both.
 
-## Definitions of Terms
+## Variables
 
-* Walkability Score: This variable was calculated by the EPa based on intersections
+* Walkability Score: This variable was calculated by the EPA based on intersections, proximity of transit stops, and proximity of commercial and residential buildings. This quantifies how likely someone would choose walking as their primary method of transportation in this area.
+
+* Core-Based Statistical Area (CBSA): This is a geographic area which consists of one or more counties and anchored by an urban center of at least 10,000 people. This is the core geographic unit used in analyses.
+
+### Health Outcomes
+
+All health outcomes are measured as age-adjusted prevalence among adults aged 18 years or older.
+
+* Asthma
+* Arthritis
+* Cancer (excluding skin cancers)
+* Chronic Kidney Disease
+* Diagnosed Diabetes
+* Coronary Heart Disease (CHD)
+* Stroke
+* High Blood Pressure
+* High Cholesterol among those who have been screened within 5 years
+* Poor Mental Health for more than 14 days
+* Poor Physical Health for more than 14 days
 
 # Results
 
 ## Preliminary Analyses
 
-INSERT TEXT HERE
+Once the data was cleaned, a total of 151 major U.S. cities and their surrounding counties (mapped as CBSA) remained with 19 variables of interest.
+
+There are no missing observations in this data set.
 
 ### Tables
 
@@ -102,6 +122,7 @@ table_1
 
 ```
 
+The following tables show the age-adjusted prevalence for all health outcomes for the top 20 U.S. cities by population in this data set.
 
 ```{r, table2}
 #| fig.align = 'center',
@@ -220,8 +241,12 @@ fig11
 
 ```
 
+These scatter plots show that across all health outcomes there is a small inverse association between walkability score and health outcomes. This association is more pronounced in certain health outcomes than other, such as arthritis, cancer, stroke, poor mental health and poor physical health. This association is less strong in asthma, kidney disease, and coronary heart disease. 
+
 ## Plans for Final Analyses
 
-* I plan to complete a linear regression between walkability score and health outcomes
-* I plan to make a dashboard -> to better show the various cities, and also so I can learn an interactive way of displaying data
+For my next steps, I plan to complete a linear regression between walkability score and all health outcomes.
+
+I also plan on developing an interactive dashboard using flexdashboard. I believe this visualization method will be the best way to show the various cities available in this data set. I also would like to learn how to make this kind of data visualization for future applications. 
+
 

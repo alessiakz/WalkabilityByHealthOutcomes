@@ -25,7 +25,7 @@ cdc_clean <- cdc_raw %>%
 
 ### renaming columns
 colnames(cdc_clean) <- c("State", "City", "Category", "Measure", "Data_Value_Unit", "Data_Value_Type", 
-                            "Data_Value", "Lower", "Upper", "CityFIPS")
+                         "Data_Value", "Lower", "Upper", "CityFIPS")
 
 #Cleaning EPA Data
 epa_filtered <- epa_raw %>% 
@@ -60,7 +60,7 @@ epa_joined <- epa_filtered %>%
 
 #both_clean <- both %>% 
 #  filter(!is.na(meanNatWalkInd))
-  
+
 
 #epa_filtered_2 <- epa_filtered %>% 
 #  filter(CSA_Name == "Atlanta--Athens-Clarke County--Sandy Springs, GA-AL")
@@ -288,20 +288,19 @@ cdc_clean_cbsa <- cdc_clean %>%
   )) %>% 
   filter(!is.na(CBSA))
 
-both <- left_join(x=cdc_clean_cbsa,
-                  y=epa_joined,
-                  by.x="CBSA",
-                  by.y="CBSA")
+both <- cdc_clean_cbsa %>% 
+  left_join(epa_joined,
+            by="CBSA")
 
 measures_wide <- both %>%
   group_by(CBSA, Measure) %>%
   pivot_wider(names_from = Measure, values_from = Data_Value)
 
 colnames(measures_wide) <- c("State", "City", "Category", "Data_Value_Unit", "Data_Value_Type", 
-                         "Lower", "Upper", "CityFIPS", "CBSA", "CBSA_Name", "CBSA_POP", 
-                         "MeanNatWalkInd", "TeethLost", "Arthritis", "Cancer", "KidneyDisease",
-                         "PulmonaryDisease", "CHD", "Asthma", "Diabetes", "HBP", "Cholesterol", "MentHealth",
-                         "PhysHealth", "Stroke")
+                             "Lower", "Upper", "CityFIPS", "CBSA", "CBSA_Name", "CBSA_POP", 
+                             "MeanNatWalkInd", "TeethLost", "Arthritis", "Cancer", "KidneyDisease",
+                             "PulmonaryDisease", "CHD", "Asthma", "Diabetes", "HBP", "Cholesterol", "MentHealth",
+                             "PhysHealth", "Stroke")
 
 
 measures <- measures_wide %>%
@@ -311,30 +310,27 @@ measures <- measures_wide %>%
   summarise(across(c(TeethLost, Arthritis, Cancer, KidneyDisease, PulmonaryDisease, CHD, Asthma,
                      Diabetes, HBP, Cholesterol, MentHealth, PhysHealth, Stroke), mean, na.rm = TRUE))
 
-data_epa_measures <- inner_join(x=epa_joined,
-                                y=measures,
-                                b.x="CBSA",
-                                b.y="CBSA")
+data_epa_measures <- epa_joined %>% 
+  inner_join(measures,
+             by="CBSA")
 
 cdc_geo <- cdc_clean_cbsa %>%
   ungroup() %>% 
   select(State, City, CBSA) %>% 
   distinct(CBSA, .keep_all = TRUE)
 
-data_all <- inner_join(x=data_epa_measures,
-                       y=cdc_geo,
-                       b.x="CSBA",
-                       b.y="CBSA")
+data_all <- data_epa_measures %>% 
+  inner_join(cdc_geo,
+             by="CBSA")
 
 data_clean <- data_all %>%
   select(State, City, CBSA, CBSA_Name, CBSA_POP, meanNatWalkInd, TeethLost, Arthritis, Cancer, KidneyDisease, PulmonaryDisease, CHD, Asthma,
          Diabetes, HBP, Cholesterol, MentHealth, PhysHealth, Stroke)
-  
+
 
 #saving clean data
 saveRDS(
   data_clean,
   file = here::here("output/data_clean.rds"))
-  
-  
-  
+
+
