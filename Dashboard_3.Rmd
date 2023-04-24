@@ -1,0 +1,358 @@
+---
+title: "EPA Walking Index By Health Outcomes in 150 Cities in the U.S."
+output: 
+  flexdashboard::flex_dashboard:
+    source_code: embed
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(shiny)
+library(plotly)
+library(sjPlot)
+
+#read in data
+#setting root directory
+here::i_am("Dashboard_3.Rmd")
+
+#making dataframe from the saved data object
+data_clean <- readRDS(
+  file = here::here("output/data_clean.rds")
+)
+
+#limiting to top 20 cities
+data_clean <- data_clean %>% 
+  filter(rank(desc(CBSA_POP))<=150)
+
+```
+
+Column {.sidebar data-width=250}
+======================================================================
+
+Use this dashboard to explore the association between a health outcome measure and walkability score for 150 cities in the U.S. in 2019.
+
+Author: [Alessia Kettlitz](https://alessiakz.github.io/portfolio/)
+
+Data Sources:
+
+- [CDC: 500 Cities: Local Data for Better Health, 2019](https://chronicdata.cdc.gov/500-Cities-Places/500-Cities-Local-Data-for-Better-Health-2019-relea/6vp6-wxuq)
+
+- [EPA: Walkability Index](https://catalog.data.gov/dataset/walkability-index)
+
+<!-- The red line on the scatterplot represents a locally-weighted estimate of how diversity varies in the metropolitan area by distance from its urban core or cores.  Click and drag on the scatterplot to highlight the corresponding Census tracts on the map below, and click on a Census tract on the map to generate a chart of race and ethnicity counts.  -->
+
+Arthritis
+======================================================================
+
+Column {data-width=600}
+-----------------------------------------------------------------------
+### Walkability Index by Prevalence of Arthritis
+```{r}
+
+fig1 <- ggplot(data_clean, aes(meanNatWalkInd, Arthritis)) +
+  geom_point(size=3) +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_minimal() +
+  xlab("Walkability Index") +
+  ylab("Age-Adjusted Prevalence (%)")
+ggplotly(fig1)
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+
+### Summary Statistics of Linear Regression
+
+```{r}
+mod1 <- lm(meanNatWalkInd ~ Arthritis, data = data_clean)
+tab_model(mod1)
+```
+
+Asthma
+======================================================================
+
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### Walkability Index by Prevalence of Asthma
+```{r}
+
+fig2 <- ggplot(data_clean, aes(meanNatWalkInd, Asthma)) +
+  geom_point(size=3) +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_minimal() +
+  xlab("Walkability Index") +
+  ylab("Age-Adjusted Prevalence (%)")
+
+ggplotly(fig2)
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+
+### Summary Statistics of Linear Regression
+
+```{r}
+mod2 <- lm(meanNatWalkInd ~ Asthma, data = data_clean)
+tab_model(mod2)
+```
+
+Cancer
+======================================================================
+
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### Walkability Index by Prevalence of Cancer (Excluding Skin Cancers)
+```{r}
+
+fig3 <- ggplot(data_clean, aes(x=meanNatWalkInd, y=Cancer)) +
+  geom_point(size=3) +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_minimal() +
+  xlab("Walkability Index") +
+  ylab("Age-Adjusted Prevalence (%)")
+
+ggplotly(fig3)
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+
+### Summary Statistics of Linear Regression
+
+```{r}
+mod3 <- lm(meanNatWalkInd ~ Cancer, data = data_clean)
+tab_model(mod3)
+```
+Kidney Disease
+======================================================================
+Column {data-width=600}
+-----------------------------------------------------------------------
+### Walkability Index by Prevalence of Chronic Kidney Disease
+```{r}
+
+fig4 <- ggplot(data_clean, aes(x=meanNatWalkInd, y=KidneyDisease)) +
+  geom_point(size=3) +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_minimal() +
+  xlab("Walkability Index") +
+  ylab("Age-Adjusted Prevalence (%)")
+
+ggplotly(fig4)
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+
+### Summary Statistics of Linear Regression
+
+```{r}
+mod4 <- lm(meanNatWalkInd ~ KidneyDisease, data = data_clean)
+tab_model(mod4)
+```
+
+Diabetes
+======================================================================
+
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### Walkability Index by Prevalence of Diagnosed Diabetes
+```{r}
+
+fig5 <- ggplot(data_clean, aes(x=meanNatWalkInd, y=Diabetes)) +
+  geom_point(size=3) +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_minimal() +
+  xlab("Walkability Index") +
+  ylab("Age-Adjusted Prevalence (%)")
+
+ggplotly(fig5)
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+
+### Summary Statistics of Linear Regression
+
+```{r}
+mod5 <- lm(meanNatWalkInd ~ Diabetes, data = data_clean)
+tab_model(mod5)
+```
+
+Coronary Heart Disease
+======================================================================
+
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### Walkability Index by Prevalence of Coronary Heart Disease
+```{r}
+
+fig6 <- ggplot(data_clean, aes(x=meanNatWalkInd, y=CHD)) +
+  geom_point(size=3) +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_minimal() +
+  xlab("Walkability Index") +
+  ylab("Age-Adjusted Prevalence (%)")
+
+ggplotly(fig6)
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+
+### Summary Statistics of Linear Regression
+
+```{r}
+mod6 <- lm(meanNatWalkInd ~ CHD, data = data_clean)
+tab_model(mod6)
+```
+
+Stroke
+======================================================================
+
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### Walkability Index by Prevalence of Stroke
+```{r}
+
+fig7 <- ggplot(data_clean, aes(x=meanNatWalkInd, y=Stroke)) +
+  geom_point(size=3) +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_minimal() +
+  xlab("Walkability Index") +
+  ylab("Age-Adjusted Prevalence (%)")
+
+ggplotly(fig7)
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+
+### Summary Statistics of Linear Regression
+
+```{r}
+mod7 <- lm(meanNatWalkInd ~ Stroke, data = data_clean)
+tab_model(mod7)
+```
+
+High Blood Pressure
+======================================================================
+
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### Walkability Index by Prevalence of High Blood Pressure
+```{r}
+
+fig8 <- ggplot(data_clean, aes(x=meanNatWalkInd, y=HBP)) +
+  geom_point(size=3) +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_minimal() +
+  xlab("Walkability Index") +
+  ylab("Age-Adjusted Prevalence (%)")
+
+ggplotly(fig8)
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+
+### Summary Statistics of Linear Regression
+
+```{r}
+mod8 <- lm(meanNatWalkInd ~ HBP, data = data_clean)
+tab_model(mod8)
+```
+
+High Cholesterol
+======================================================================
+
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### Walkability Index by Prevalence of High Cholesterol Among those Who Have Been Screened Within 5 Years
+```{r}
+
+fig9 <- ggplot(data_clean, aes(x=meanNatWalkInd, y=Cholesterol)) +
+  geom_point(size=3) +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_minimal() +
+  xlab("Walkability Index") +
+  ylab("Age-Adjusted Prevalence (%)")
+
+ggplotly(fig9)
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+
+### Summary Statistics of Linear Regression
+
+```{r}
+mod9 <- lm(meanNatWalkInd ~ Cholesterol, data = data_clean)
+tab_model(mod9)
+```
+
+Mental Health
+======================================================================
+
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### Walkability Index by Prevalence of Poor Mental Health for More than 14 Days
+```{r}
+
+fig10 <- ggplot(data_clean, aes(x=meanNatWalkInd, y=MentHealth)) +
+  geom_point(size=3) +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_minimal() +
+  xlab("Walkability Index") +
+  ylab("Age-Adjusted Prevalence (%)")
+
+ggplotly(fig10)
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+
+### Summary Statistics of Linear Regression
+
+```{r}
+mod10 <- lm(meanNatWalkInd ~ MentHealth, data = data_clean)
+tab_model(mod10)
+```
+
+Physical Health
+======================================================================
+
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### Walkability Index by Prevalence of Poor Physical Health for More than 14 Days
+```{r}
+
+fig11 <- ggplot(data_clean, aes(x=meanNatWalkInd, y=PhysHealth)) +
+  geom_point(size=3) +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_minimal() +
+  xlab("Walkability Index") +
+  ylab("Age-Adjusted Prevalence (%)")
+
+ggplotly(fig11)
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+
+### Summary Statistics of Linear Regression
+
+```{r}
+mod11 <- lm(meanNatWalkInd ~ PhysHealth, data = data_clean)
+tab_model(mod11)
+```
