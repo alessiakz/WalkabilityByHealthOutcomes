@@ -218,11 +218,74 @@ tab6 <- data_20 %>%
 
 tab6
 
+#identifying top 5 cities with lowest and higest rates of chronic disease (avg)
+rowwise_mean <- function(ds_subset) {
+  Reduce(`+`, ds_subset) / ncol(ds_subset)
+}
+data_clean$avgchrodis<- rowwise_mean(data_clean [, c("Asthma", "Arthritis","Cancer", 
+                                                     "KidneyDisease", "Diabetes", "CHD", "Stroke", "HBP", "Cholesterol", "MentHealth", "PhysHealth")])
+
+data_high5<- data_clean %>% 
+  filter(rank(desc(avgchrodis))<=5)
+
+data_low5<- data_clean %>% 
+  filter(rank((avgchrodis))<=5)
+
+#making highest 5
+highest5 <- data_high5 %>% 
+  select(CBSA_Name, avgchrodis) %>% 
+  arrange(avgchrodis) %>% 
+  gt(rowname_col = "CBSA_Name") %>% 
+  tab_header(
+    title = md("**Top 5 Metroplitan Areas with the Highest Average Age-Adjusted Prevalence (%) for Chronic Disease**")) %>% 
+  tab_stubhead(label = "Core-Based Statistical Area (CBSA)"
+  ) %>% 
+  fmt_number(
+    columns = c(avgchrodis),
+    rows = everything(),
+    decimals = 2,
+    n_sigfig = NULL,
+  ) %>% 
+  cols_label(
+    avgchrodis = "Average Age-Ajusted Prevalence of Chronic Disease") %>% 
+  cols_align(
+    align = "center",
+    columns = everything()
+  ) %>% 
+  cols_align_decimal()
+
+highest5 
+
+#making lowest 5
+lowest5 <- data_low5 %>% 
+  select(CBSA_Name, avgchrodis) %>% 
+  arrange(avgchrodis) %>% 
+  gt(rowname_col = "CBSA_Name") %>% 
+  tab_header(
+    title = md("**Top 5 Metroplitan Areas with the Lowest Average Age-Adjusted Prevalence (%) for Chronic Disease**")) %>% 
+  tab_stubhead(label = "Core-Based Statistical Area (CBSA)"
+  ) %>% 
+  fmt_number(
+    columns = c(avgchrodis),
+    rows = everything(),
+    decimals = 2,
+    n_sigfig = NULL,
+  ) %>% 
+  cols_label(
+    avgchrodis = "Average Age-Ajusted Prevalence of Chronic Disease") %>% 
+  cols_align(
+    align = "center",
+    columns = everything()
+  ) %>% 
+  cols_align_decimal()
+
+lowest5
+
+#saving tables as RDS
 saveRDS(
   tab1,
   file = here::here("output/table_1.rds")
 )
-
 
 saveRDS(
   tab2,
@@ -248,6 +311,17 @@ saveRDS(
   tab6,
   file = here::here("output/table_6.rds")
 )
+
+saveRDS(
+  highest5,
+  file = here::here("output/highest5.rds")
+)
+
+saveRDS(
+  lowest5,
+  file = here::here("output/lowest5.rds")
+)
+
 
 
 

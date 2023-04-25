@@ -9,17 +9,19 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 library(knitr)
 library(kableExtra)
+library(car)
+library(gtsummary)
 
 ```
 
 ```{r, load-in-data, include = FALSE}
 
 here::i_am("Report.Rmd") #identifies root directory location
-data <- readRDS( #reading in R object for data
+data_clean <- readRDS( #reading in R object for data
   file = here::here("output/data_clean.rds")
 )
 
@@ -31,19 +33,19 @@ This project is hosted on GitHub here: https://github.com/alessiakz/WalkabilityB
 
 ## Background
 
-This project aims to compare key health outcomes in major U.S. cities with their Environmental Protection Agency (EPA) walkability score.
+This project aims to compare key health outcomes in major U.S. cities with their Environmental Protection Agency (EPA) walkability index.
 
 There is a strong emphasis by medical institutions, the Centers for Disease Control and Prevention (CDC), public health officials and urban planners on the importance of creating a walkable city to improve health outcomes of residences. Building walkable cities can encourage people to lead an active lifestyle. Further, in 2015, the Surgeon General made a call to action to encourage walking and building walkable spaces in cities.
 
 ## Project Objectives
 
-The primary analysis question is: Is a city's walkability score associated with prevalence of chronic disease?
+The primary analysis question is: Is a city's walkability index associated with prevalence of chronic disease?
 
-An association above 0.5 with a p-value less than 0.05 will indicate that an association exist.
+To assess this linear regression models will be considered. A p-value of less than 0.05 will indicate that an association exists. 
 
 The secondary questions of this analysis are:
 
--   Which chronic diseases have a higher/lower association with walkability score?
+-   Which chronic diseases have a higher/lower association with walkability index ?
 -   Which cities have the lowest rates of chronic disease? Which cities have the highest rates of chronic disease?
 
 # Methods
@@ -72,7 +74,7 @@ The CDC data set was first limited to city-level estimates, health outcome measu
 
 For the EPA data set, the walkability index of each core-based statistical area (CBSA) was calculated through the average of each block group in that CBSA.
 
-Once both data sets were restructured, they were merged by the CBSA code. Then, the structure of the data set was changed from the long to wide format. This resulted in a clean data set with a row for each CBSA and columns for walkability score, and prevalence of health outcomes.
+Once both data sets were restructured, they were merged by the CBSA code. Then, the structure of the data set was changed from the long to wide format. This resulted in a clean data set with a row for each CBSA and columns for walkability index, and prevalence of health outcomes.
 
 ## Limitations
 
@@ -124,6 +126,7 @@ table_1
 
 The following tables show the age-adjusted prevalence for all health outcomes for the top 20 U.S. cities by population in this data set.
 
+Table 2: Walkability Index and Age-Adjusted Prevalence for Arthritis, Asthma, Cancer for the Top 20 U.S. Cities by Population
 ```{r, table2}
 #| fig.align = 'center',
 
@@ -134,7 +137,7 @@ table_2 <- readRDS(
 table_2
 
 ```
-
+Table 3: Walkability Index and Age-Adjusted Prevalence for Kidney Disease and Diabetes for the Top 20 U.S. Cities by Population
 ```{r, table3}
 #| fig.align = 'center',
 
@@ -145,7 +148,7 @@ table_3 <- readRDS(
 table_3
 
 ```
-
+Table 4: Walkability Index and Age-Adjusted Prevalence for Coronary Heart Disease and Stroke for the Top 20 U.S. Cities by Population
 ```{r, table4}
 #| fig.align = 'center',
 
@@ -156,7 +159,7 @@ table_4 <- readRDS(
 table_4
 
 ```
-
+Table 5: Walkability Index and Age-Adjusted Prevalence for High Blood Pressure and High Cholesterol for the Top 20 U.S. Cities by Population
 ```{r, table5}
 #| fig.align = 'center',
 
@@ -167,7 +170,7 @@ table_5 <- readRDS(
 table_5
 
 ```
-
+Table 6: Walkability Index and Age-Adjusted Prevalence for Poor Mental Health and Poor Physical Health for the Top 20 U.S. Cities by Population
 ```{r, table6}
 #| fig.align = 'center',
 
@@ -178,9 +181,43 @@ table_6 <- readRDS(
 table_6
 
 ```
+As part of this preliminary analysis, a secondary analysis question was explored.
+
+The top 5 metropolitan areas in this data set with the lowest average rates of chronic disease are shown in table 7.
+
+Table 7: Top 5 Metropolitan Areas with Lowest Average Age-Adjusted Rates of Chronic Disease
+```{r, table-7}
+#| fig.align = 'center',
+
+lowest5 <- readRDS(
+  file = here::here("output/lowest5.rds")
+)
+
+lowest5
+
+```
+
+The top 5 metropolitan areas in this data set with the highest average rates of chronic disease are shown in table 8: 
+
+Table 8: Top 5 Metropolitan Areas with Highest Average Age-Adjusted Rates of Chronic Disease
+```{r, table-8}
+#| fig.align = 'center',
+
+highest5 <- readRDS(
+  file = here::here("output/highest5.rds")
+)
+
+highest5
+
+```
 
 ### Scatter Plots Between Walkability Score and Health Outcomes
 
+To assess the association between walkability index and health outcomes, a scatter plot of each health outcome plotted against walking index was created. A linear regression line was also added to the plots.
+
+These plots were also illustrated on a dashboard. The dashboard can be found [here](). 
+
+Figures 1-11: Age Adjusted Prevalence for Each Health Outcome by Walkability Index
 ```{r, scatter_all,  fig.show="hold", out.width="50%", echo=FALSE}
 
 fig1 <- readRDS(
@@ -241,9 +278,114 @@ fig11
 
 ```
 
-These scatter plots show that across all health outcomes there is a small inverse association between walkability score and health outcomes. This association is more pronounced in certain health outcomes than other, such as arthritis, cancer, stroke, poor mental health and poor physical health. This association is less strong in asthma, kidney disease, and coronary heart disease. 
+These scatter plots show that across all health outcomes there is a small inverse association between walkability index and health outcomes. This association is more pronounced in certain health outcomes than other, such as arthritis, cancer, stroke, poor mental health and poor physical health. This association is less strong in asthma, kidney disease, and coronary heart disease. 
 
 ## Final Analysis - Linear Regression
+
+Before conducting the linear regression, the normality of each variable was considered. This is shown in the scatter plot matrix below. Further, the data was explored for outliers using tests for outliers and influencers. While McAllen-Edinburg-Mission, TX and San Antonio-New Braunfels, TX were noted as being the most influential geographic areas, no significant outliers or influencers were identified. These are illustrated in influence plot below.
+
+
+Figure 12: Scatter Plot Matrix For Each Variable of Interest
+```{r, results=FALSE}
+#| fig.align = 'center',
+scatterplotMatrix(~ meanNatWalkInd + Asthma + Arthritis + Cancer + KidneyDisease + Diabetes +
+                    CHD + Stroke + HBP + Cholesterol + MentHealth + PhysHealth,
+                  span = 0.7,
+                  data = data_clean)
+
+
+```
+
+Figure 13: Influence Plot of Walkability Index and All Health Outcomes of Interest
+```{r, results=FALSE}
+#| fig.align = 'center',
+mod1 <- lm(meanNatWalkInd ~ Asthma + Arthritis + Cancer + KidneyDisease + Diabetes +
+             CHD + Stroke + HBP + Cholesterol + MentHealth + PhysHealth,
+           data = data_clean)
+
+influencePlot(mod1, id.n=3)
+
+```
+
+The scatter plot matrix show that each variable to be considered are largely normally distributed. However, one important observation is that the Walkability Index is binodal, as it has two peaks. 
+
+Thus, as the data set has met the requirements of linear regression without additional cleaning (such as removal of outliers, or need for log transformation), linear regression was then conducted. 
+
+To assess the ability of the Walkability Index to predict a city's health outcome, linear regression was conducted for each health outcome. The results of these regression can be found in Tables 7-9:
+
+Tables 9-11: Linear Regression Models for Walkability Index and Health Outcomes of Interest
+```{r}
+#| fig.align = 'center',
+tbl_modelall1 <- readRDS(
+  file = here::here("output/tbl_model1.rds")
+)
+
+tbl_modelall2 <- readRDS(
+  file = here::here("output/tbl_model2.rds")
+)
+
+tbl_modelall3 <- readRDS(
+  file = here::here("output/tbl_model3.rds")
+)
+
+tbl_modelall4 <- readRDS(
+  file = here::here("output/tbl_model4.rds")
+)
+
+as_gt(tbl_modelall1) %>% gt::as_latex()
+as_gt(tbl_modelall2) %>% gt::as_latex()
+as_gt(tbl_modelall3) %>% gt::as_latex()
+as_gt(tbl_modelall4) %>% gt::as_latex()
+```
+
+Each of these models are statistically significant, suggesting a relationship between walkability index and each of these chronic health disease outcomes.
+
+Further, each Beta value was negative, suggesting a negative relationship between walkability index and the health outcomes. Therefore, as walkability index increases, the prevalence of health outcomes decreases. For example, for every unit increase in walkability index, the age-adjusted prevalence (%) of arthritis decreases by 0.99.
+
+# Conclusions
+
+Given the statistical significance of each of these linear regression models, we reject the null hypothesis that there is no association between the health outcomes of interest and the walkability index. It appears that each health outcome of interest is associated with walkability index. Each health outcome also have an inverse relationship.
+
+Thus, this matches other studies which have found an association between walkability of a city with an improvement of healthy behaviors. However, this further shows that walkability of a city may improve the health of their residents. More research is needed to investigate this association.
+
+# References
+
+      Iannone R, Cheng J, Schloerke B, Hughes E, Seo J (2022). _gt: Easily Create Presentation-Ready
+  Display Tables_. R package version 0.8.0, <https://CRAN.R-project.org/package=gt>.
+  
+    JJ Allaire and Yihui Xie and Jonathan McPherson and Javier Luraschi and Kevin Ushey and Aron
+  Atkins and Hadley Wickham and Joe Cheng and Winston Chang and Richard Iannone (2022). rmarkdown:
+  Dynamic Documents for R. R package version 2.19. URL https://rmarkdown.rstudio.com.
+  
+    John Fox and Sanford Weisberg (2019). An {R} Companion to Applied Regression, Third Edition.
+  Thousand Oaks CA: Sage. URL: https://socialsciences.mcmaster.ca/jfox/Books/Companion/
+  
+   R Core Team (2022). R: A language and environment for statistical computing. R Foundation for
+  Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+Sievert C, Iannone R, Allaire J, Borges B (2023). _flexdashboard: R Markdown Format for Flexible
+  Dashboards_. R package version 0.6.1, <https://CRAN.R-project.org/package=flexdashboard>.
+  
+    Sjoberg DD, Whiting K, Curry M, Lavery JA, Larmarange J. Reproducible summary tables with the
+  gtsummary package. The R Journal 2021;13:570–80. https://doi.org/10.32614/RJ-2021-053.
+  
+    Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Hayes A, Henry L,
+  Hester J, Kuhn M, Pedersen TL, Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP,
+  Spinu V, Takahashi K, Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to the tidyverse.”
+  _Journal of Open Source Software_, *4*(43), 1686. doi:10.21105/joss.01686
+  <https://doi.org/10.21105/joss.01686>.
+  
+  H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
+  
+    Wickham H (2022). _stringr: Simple, Consistent Wrappers for Common String Operations_. R package
+  version 1.5.0, <https://CRAN.R-project.org/package=stringr>.
+  
+    Yihui Xie (2022). knitr: A General-Purpose Package for Dynamic Report Generation in R. R package
+  version 1.41.
+  
+    Zhu H (2021). _kableExtra: Construct Complex Table with 'kable' and Pipe Syntax_. R package
+  version 1.3.4, <https://CRAN.R-project.org/package=kableExtra>.
+  
 
 
 
