@@ -104,7 +104,7 @@ All health outcomes are measured as age-adjusted prevalence among adults aged 18
 
 ## Preliminary Analyses
 
-Once the data was cleaned, a total of 151 major U.S. cities and their surrounding counties (mapped as CBSA) remained with 19 variables of interest.
+Once the data was cleaned, a total of 150 major U.S. cities and their surrounding counties (mapped as CBSA) remained with 19 variables of interest.
 
 There are no missing observations in this data set.
 
@@ -243,10 +243,8 @@ fig11
 
 These scatter plots show that across all health outcomes there is a small inverse association between walkability score and health outcomes. This association is more pronounced in certain health outcomes than other, such as arthritis, cancer, stroke, poor mental health and poor physical health. This association is less strong in asthma, kidney disease, and coronary heart disease. 
 
-## Plans for Final Analyses
+## Final Analysis - Linear Regression
 
-For my next steps, I plan to complete a linear regression between walkability score and all health outcomes.
 
-I also plan on developing an interactive dashboard using flexdashboard. I believe this visualization method will be the best way to show the various cities available in this data set. I also would like to learn how to make this kind of data visualization for future applications. 
 
 
