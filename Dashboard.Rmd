@@ -1,8 +1,9 @@
 ---
-title: "EPA Walking Index By Health Outcomes in 150 Cities in the U.S."
+title: "Walking Index By Health Outcomes in 150 U.S. Cities"
 output: 
   flexdashboard::flex_dashboard:
-    source_code: embed
+    horizontal_layout: fill
+    vertical_layout: fill
 runtime: shiny
 ---
 
@@ -15,7 +16,7 @@ library(sjPlot)
 
 #read in data
 #setting root directory
-here::i_am("Dashboard_3.Rmd")
+here::i_am("Dashboard.Rmd")
 
 #making dataframe from the saved data object
 data_clean <- readRDS(
@@ -28,7 +29,7 @@ data_clean <- data_clean %>%
 
 ```
 
-Column {.sidebar data-width=250}
+Column {.sidebar data-width=200}
 ======================================================================
 
 Use this dashboard to explore the association between a health outcome measure and walkability score for 150 cities in the U.S. in 2019.
@@ -46,7 +47,7 @@ Data Sources:
 Arthritis
 ======================================================================
 
-Column {data-width=600}
+Column {data-width=450}
 -----------------------------------------------------------------------
 ### Walkability Index by Prevalence of Arthritis
 ```{r}
@@ -73,7 +74,7 @@ tab_model(mod1)
 Asthma
 ======================================================================
 
-Column {data-width=600}
+Column {data-width=450}
 -----------------------------------------------------------------------
 
 ### Walkability Index by Prevalence of Asthma
@@ -102,7 +103,7 @@ tab_model(mod2)
 Cancer
 ======================================================================
 
-Column {data-width=600}
+Column {data-width=450}
 -----------------------------------------------------------------------
 
 ### Walkability Index by Prevalence of Cancer (Excluding Skin Cancers)
@@ -127,9 +128,10 @@ Column {data-width=150}
 mod3 <- lm(meanNatWalkInd ~ Cancer, data = data_clean)
 tab_model(mod3)
 ```
+
 Kidney Disease
 ======================================================================
-Column {data-width=600}
+Column {data-width=450}
 -----------------------------------------------------------------------
 ### Walkability Index by Prevalence of Chronic Kidney Disease
 ```{r}
@@ -157,7 +159,7 @@ tab_model(mod4)
 Diabetes
 ======================================================================
 
-Column {data-width=600}
+Column {data-width=450}
 -----------------------------------------------------------------------
 
 ### Walkability Index by Prevalence of Diagnosed Diabetes
@@ -183,10 +185,10 @@ mod5 <- lm(meanNatWalkInd ~ Diabetes, data = data_clean)
 tab_model(mod5)
 ```
 
-Coronary Heart Disease
+CHD
 ======================================================================
 
-Column {data-width=600}
+Column {data-width=450}
 -----------------------------------------------------------------------
 
 ### Walkability Index by Prevalence of Coronary Heart Disease
@@ -215,7 +217,7 @@ tab_model(mod6)
 Stroke
 ======================================================================
 
-Column {data-width=600}
+Column {data-width=450}
 -----------------------------------------------------------------------
 
 ### Walkability Index by Prevalence of Stroke
@@ -241,10 +243,10 @@ mod7 <- lm(meanNatWalkInd ~ Stroke, data = data_clean)
 tab_model(mod7)
 ```
 
-High Blood Pressure
+HBP
 ======================================================================
 
-Column {data-width=600}
+Column {data-width=450}
 -----------------------------------------------------------------------
 
 ### Walkability Index by Prevalence of High Blood Pressure
@@ -270,10 +272,10 @@ mod8 <- lm(meanNatWalkInd ~ HBP, data = data_clean)
 tab_model(mod8)
 ```
 
-High Cholesterol
+Cholesterol
 ======================================================================
 
-Column {data-width=600}
+Column {data-width=450}
 -----------------------------------------------------------------------
 
 ### Walkability Index by Prevalence of High Cholesterol Among those Who Have Been Screened Within 5 Years
@@ -302,7 +304,7 @@ tab_model(mod9)
 Mental Health
 ======================================================================
 
-Column {data-width=600}
+Column {data-width=450}
 -----------------------------------------------------------------------
 
 ### Walkability Index by Prevalence of Poor Mental Health for More than 14 Days
@@ -331,7 +333,7 @@ tab_model(mod10)
 Physical Health
 ======================================================================
 
-Column {data-width=600}
+Column {data-width=450}
 -----------------------------------------------------------------------
 
 ### Walkability Index by Prevalence of Poor Physical Health for More than 14 Days

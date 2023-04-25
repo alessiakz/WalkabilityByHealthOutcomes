@@ -215,7 +215,7 @@ highest5
 
 To assess the association between walkability index and health outcomes, a scatter plot of each health outcome plotted against walking index was created. A linear regression line was also added to the plots.
 
-These plots were also illustrated on a dashboard. The dashboard can be found [here](). 
+These plots were also illustrated on a dashboard. The dashboard can be found [here](https://m5wlv1-alessia-kettlitz.shinyapps.io/WalkingIndexByHealthOutcomes/). 
 
 Figures 1-11: Age Adjusted Prevalence for Each Health Outcome by Walkability Index
 ```{r, scatter_all,  fig.show="hold", out.width="50%", echo=FALSE}
@@ -350,6 +350,9 @@ Thus, this matches other studies which have found an association between walkabi
 
 # References
 
+      C. Sievert. Interactive Web-Based Data Visualization with R, plotly, and
+  shiny. Chapman and Hall/CRC Florida, 2020.
+
       Iannone R, Cheng J, Schloerke B, Hughes E, Seo J (2022). _gt: Easily Create Presentation-Ready
   Display Tables_. R package version 0.8.0, <https://CRAN.R-project.org/package=gt>.
   
@@ -360,10 +363,16 @@ Thus, this matches other studies which have found an association between walkabi
     John Fox and Sanford Weisberg (2019). An {R} Companion to Applied Regression, Third Edition.
   Thousand Oaks CA: Sage. URL: https://socialsciences.mcmaster.ca/jfox/Books/Companion/
   
-   R Core Team (2022). R: A language and environment for statistical computing. R Foundation for
+    Lüdecke D (2023). _sjPlot: Data Visualization for Statistics in Social
+  Science_. R package version 2.8.14, <https://CRAN.R-project.org/package=sjPlot>.
+  
+    Müller K (2020). _here: A Simpler Way to Find Your Files_. R package
+  version 1.0.1, <https://CRAN.R-project.org/package=here>.
+  
+    R Core Team (2022). R: A language and environment for statistical computing. R Foundation for
   Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
   
-Sievert C, Iannone R, Allaire J, Borges B (2023). _flexdashboard: R Markdown Format for Flexible
+    Sievert C, Iannone R, Allaire J, Borges B (2023). _flexdashboard: R Markdown Format for Flexible
   Dashboards_. R package version 0.6.1, <https://CRAN.R-project.org/package=flexdashboard>.
   
     Sjoberg DD, Whiting K, Curry M, Lavery JA, Larmarange J. Reproducible summary tables with the
@@ -375,7 +384,7 @@ Sievert C, Iannone R, Allaire J, Borges B (2023). _flexdashboard: R Markdown For
   _Journal of Open Source Software_, *4*(43), 1686. doi:10.21105/joss.01686
   <https://doi.org/10.21105/joss.01686>.
   
-  H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
+    H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
   
     Wickham H (2022). _stringr: Simple, Consistent Wrappers for Common String Operations_. R package
   version 1.5.0, <https://CRAN.R-project.org/package=stringr>.
